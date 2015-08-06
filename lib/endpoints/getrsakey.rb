@@ -17,12 +17,7 @@ module SteamWeb
           check_success: true
         })
 
-        body = super(options)
-        json = body[:json_body]
-
-        require_field body, :publickey_exp
-        require_field body, :publickey_mod
-        require_field body, :timestamp
+        json = super(options)[:json_body]
 
         key = OpenSSL::PKey::RSA.new
         key.e = OpenSSL::BN.new json[:publickey_exp].to_i(16)

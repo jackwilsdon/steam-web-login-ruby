@@ -3,12 +3,6 @@ require 'json'
 module SteamWeb
   class JSONEndpoint < Endpoint
 
-    def require_field(body, field_name)
-      return if body[:json_body].include? field_name
-
-      fail InvalidResponseError.new self, body[:body], "missing field `#{field_name}' from response"
-    end
-
     def request(**options)
       check_success = options.include?(:check_success) ? options[:check_success] : false
       options.delete(:check_success) if options.include? :check_success
