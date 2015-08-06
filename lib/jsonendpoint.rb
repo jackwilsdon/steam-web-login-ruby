@@ -13,7 +13,7 @@ module SteamWeb
       check_success = options.include?(:check_success) ? options[:check_success] : false
       options.delete(:check_success) if options.include? :check_success
 
-      body = super options
+      body = super(options).body
 
       begin
         json_body = JSON.parse(body).symbolize_keys

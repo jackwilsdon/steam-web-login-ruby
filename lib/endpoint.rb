@@ -35,7 +35,7 @@ module SteamWeb
         fail ArgumentError, 'method must be either get or post'
       end
 
-      response.body
+      response
     end
 
     def to_s
