@@ -37,8 +37,6 @@ module SteamWeb
           options.delete source
         end
 
-        p options
-
         json = super(options)[:json_body]
 
         response = {
