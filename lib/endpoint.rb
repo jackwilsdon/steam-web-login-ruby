@@ -15,7 +15,12 @@ module SteamWeb
     end
 
     def request(**options)
-      uri = URI.parse url
+      if options.include?(:url)
+        uri = URI.parse options[:url]
+      else
+        uri = URI.parse url
+      end
+
       request_params = options.include?(:params) ? params.merge(options[:params]) : params
 
       fail InvalidUrlError, self unless uri.is_a? URI::HTTP
