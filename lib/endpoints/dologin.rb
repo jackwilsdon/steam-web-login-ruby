@@ -43,7 +43,7 @@ module SteamWeb
           captcha_needed: false,
           emailauth_needed: false,
           incorrect_login: false,
-          transfer_url: nil,
+          transfer_url: "",
           transfer_parameters: {}
         }
 
