@@ -19,7 +19,7 @@ module SteamWeb
         end
       end
 
-      { body: body, json_body: json_body }
+      json_body
     end
   end
 end

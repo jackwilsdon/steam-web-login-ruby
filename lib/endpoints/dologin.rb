@@ -37,7 +37,7 @@ module SteamWeb
           options.delete source
         end
 
-        json = super(options)[:json_body]
+        json = super options
 
         response = {
           captcha_needed: false,
@@ -72,8 +72,6 @@ module SteamWeb
             transfer_parameters: json[:transfer_parameters]
           })
         end
-
-        #response[:json_body] = json
 
         response
       end

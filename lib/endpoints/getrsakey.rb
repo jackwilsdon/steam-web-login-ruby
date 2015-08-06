@@ -17,7 +17,7 @@ module SteamWeb
           check_success: true
         })
 
-        json = super(options)[:json_body]
+        json = super options
 
         key = OpenSSL::PKey::RSA.new
         key.e = OpenSSL::BN.new json[:publickey_exp].to_i(16)
