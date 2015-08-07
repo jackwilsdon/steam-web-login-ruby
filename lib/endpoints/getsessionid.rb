@@ -14,9 +14,11 @@ module SteamWeb
 
         cookie = response.cookies.find { |cookie| cookie.name == 'sessionid'}
 
-        return nil if cookie.nil?
+        result = { cookies: response.cookies }
 
-        { session_id: cookie.name_and_value.split('=').last, cookies: response.cookies }
+        result[:session_id] = cookie.name_and_value.split('=').last unless cookie.nil?
+
+        result
       end
     end
   end
