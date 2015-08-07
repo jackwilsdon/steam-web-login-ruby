@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'bundler/setup'
+
 require_relative './ext/hash.rb'
 
 require_relative './errors.rb'
@@ -6,12 +9,50 @@ require_relative './jsonendpoint.rb'
 
 require_relative './endpoints/getrsakey.rb'
 require_relative './endpoints/dologin.rb'
+require_relative './endpoints/transfer.rb'
+require_relative './endpoints/getsessionid.rb'
 
 module SteamWeb
   def self.login(username, password, **options)
+    login_response = {
+      captcha_needed: false,
+      emailauth_needed: false,
+      incorrect_login: false,
+      login_success: false
+    }
+
     rsa_key = Endpoints::GetRSAKeyEndpoint.new.request username
     transfer = Endpoints::DoLoginEndpoint.new.request username, password, rsa_key, options
 
-    transfer
+    if transfer[:captcha_needed]
+      login_response.merge!(
+        captcha_needed: true,
+        captcha_gid: transfer[:captcha_gid]
+      )
+    end
+
+    if transfer[:emailauth_needed]
+      login_response.merge!(
+        emailauth_needed: true,
+        emailauth_domain: transfer[:emailauth_domain],
+        emailauth_steamid: transfer[:emailauth_steamid]
+      )
+    end
+
+    login_response[:incorrect_login] = true if transfer[:incorrect_login]
+
+    if login_response[:captcha_needed] || login_response[:emailauth_needed] || login_response[:incorrect_login]
+      return login_response
+    end
+
+    cookies = Endpoints::TransferEndpoint.new.request transfer[:transfer_url], transfer[:transfer_parameters]
+    session_id = Endpoints::GetSessionIDEndpoint.new.request cookies
+
+    unless session_id.nil?
+      login_response[:login_success] = true
+      login_response[:login_session_id] = session_id
+    end
+
+    login_response
   end
 end
