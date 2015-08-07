@@ -52,7 +52,7 @@ module SteamWeb
       login_response.merge!(
         login_success: true,
         login_session_id: session[:session_id],
-        login_cookies: = session[:cookies]
+        login_cookies: session[:cookies]
       )
     end
 
