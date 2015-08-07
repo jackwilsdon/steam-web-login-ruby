@@ -2,7 +2,6 @@ require 'json'
 
 module SteamWeb
   class JSONEndpoint < Endpoint
-
     def request(**options)
       check_success = options.include?(:check_success) ? options[:check_success] : false
       options.delete(:check_success) if options.include? :check_success
