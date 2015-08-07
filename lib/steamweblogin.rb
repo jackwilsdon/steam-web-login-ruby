@@ -17,7 +17,7 @@ module SteamWeb
     login_response = {
       captcha_needed: false,
       emailauth_needed: false,
-      incorrect_login: false,
+      login_incorrect: false,
       login_success: false
     }
 
@@ -39,9 +39,9 @@ module SteamWeb
       )
     end
 
-    login_response[:incorrect_login] = true if transfer_data[:incorrect_login]
+    login_response[:login_incorrect] = true if transfer_data[:incorrect_login]
 
-    if login_response[:captcha_needed] || login_response[:emailauth_needed] || login_response[:incorrect_login]
+    if login_response[:captcha_needed] || login_response[:emailauth_needed] || login_response[:login_incorrect]
       return login_response
     end
 
