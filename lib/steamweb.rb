@@ -48,7 +48,7 @@ module SteamWeb
     cookies = Endpoints::TransferEndpoint.new.request transfer_data[:transfer_url], transfer_data[:transfer_parameters]
     session = Endpoints::GetSessionIDEndpoint.new.request cookies
 
-    unless session_id.nil?
+    unless session.include? :session_id
       login_response.merge!(
         login_success: true,
         login_session_id: session[:session_id],
