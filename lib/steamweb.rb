@@ -46,11 +46,12 @@ module SteamWeb
     end
 
     cookies = Endpoints::TransferEndpoint.new.request transfer_data[:transfer_url], transfer_data[:transfer_parameters]
-    session_id = Endpoints::GetSessionIDEndpoint.new.request cookies
+    session = Endpoints::GetSessionIDEndpoint.new.request cookies
 
     unless session_id.nil?
       login_response[:login_success] = true
-      login_response[:login_session_id] = session_id
+      login_response[:login_session_id] = session[:session_id]
+      login_response[:login_cookies] = session[:cookies]
     end
 
     login_response
