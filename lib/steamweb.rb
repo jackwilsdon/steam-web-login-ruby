@@ -49,9 +49,11 @@ module SteamWeb
     session = Endpoints::GetSessionIDEndpoint.new.request cookies
 
     unless session_id.nil?
-      login_response[:login_success] = true
-      login_response[:login_session_id] = session[:session_id]
-      login_response[:login_cookies] = session[:cookies]
+      login_response.merge!(
+        login_success: true,
+        login_session_id: session[:session_id],
+        login_cookies: = session[:cookies]
+      )
     end
 
     login_response
