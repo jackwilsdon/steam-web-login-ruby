@@ -22,30 +22,30 @@ module SteamWeb
     }
 
     rsa_key = Endpoints::GetRSAKeyEndpoint.new.request username
-    transfer = Endpoints::DoLoginEndpoint.new.request username, password, rsa_key, options
+    transfer_data = Endpoints::DoLoginEndpoint.new.request username, password, rsa_key, options
 
-    if transfer[:captcha_needed]
+    if transfer_data[:captcha_needed]
       login_response.merge!(
         captcha_needed: true,
         captcha_gid: transfer[:captcha_gid]
       )
     end
 
-    if transfer[:emailauth_needed]
+    if transfer_data[:emailauth_needed]
       login_response.merge!(
         emailauth_needed: true,
-        emailauth_domain: transfer[:emailauth_domain],
-        emailauth_steamid: transfer[:emailauth_steamid]
+        emailauth_domain: transfer_data[:emailauth_domain],
+        emailauth_steamid: transfer_data[:emailauth_steamid]
       )
     end
 
-    login_response[:incorrect_login] = true if transfer[:incorrect_login]
+    login_response[:incorrect_login] = true if transfer_data[:incorrect_login]
 
     if login_response[:captcha_needed] || login_response[:emailauth_needed] || login_response[:incorrect_login]
       return login_response
     end
 
-    cookies = Endpoints::TransferEndpoint.new.request transfer[:transfer_url], transfer[:transfer_parameters]
+    cookies = Endpoints::TransferEndpoint.new.request transfer_data[:transfer_url], transfer_data[:transfer_parameters]
     session_id = Endpoints::GetSessionIDEndpoint.new.request cookies
 
     unless session_id.nil?
