@@ -16,7 +16,7 @@ module SteamWeb
 
         return nil if cookie.nil?
 
-        cookie.name_and_value.split('=').last
+        { session_id: cookie.name_and_value.split('=').last, cookies: response.cookies }
       end
     end
   end
