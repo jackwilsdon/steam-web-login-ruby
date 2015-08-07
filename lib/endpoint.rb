@@ -1,6 +1,8 @@
-require 'net/http'
+require 'httpi'
 
 require_relative './errors.rb'
+
+HTTPI.log = false
 
 module SteamWeb
   class Endpoint
@@ -25,17 +27,25 @@ module SteamWeb
 
       fail InvalidUrlError, self unless uri.is_a? URI::HTTP
 
-      if method == :get
-        uri.query = URI.encode_www_form request_params
+      request = HTTPI::Request.new
 
-        response = Net::HTTP.get_response uri
+      request.url = uri
+      request.set_cookies options[:cookies] if options.include? :cookies
+      request.follow_redirect = true
+
+      if method == :get
+        request.query = request_params
+
+        request_method = HTTPI.method :get
       elsif method == :post
-        response = Net::HTTP.post_form uri, request_params
+        request.body = request_params
+
+        request_method = HTTPI.method :post
       else
         fail ArgumentError, 'method must be either get or post'
       end
 
-      response
+      request_method.call request
     end
 
     def to_s
