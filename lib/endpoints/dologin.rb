@@ -43,11 +43,11 @@ module SteamWeb
           captcha_needed: false,
           emailauth_needed: false,
           incorrect_login: false,
-          transfer_url: "",
+          transfer_url: '',
           transfer_parameters: {}
         }
 
-        if json[:message] == "Incorrect login."
+        if json[:message] == 'Incorrect login.'
           response.merge! incorrect_login: true
         end
 
